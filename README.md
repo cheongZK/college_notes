@@ -1,1 +1,2 @@
-# college_notes
+College notes stuff for finals
+
