@@ -2000,7 +2000,9 @@ c)  **Q-learning for the Robot:**
 **Question 2 (Based on Tutorial 11 Q2, Jan/Feb 2020 Q4b)**
 
 a)  Define a Markov Decision Process (MDP) by listing its five key components. Explain the Markov Property and its significance in simplifying RL problems. (7 marks)
+
 b)  Consider the "Lizard Game" (as described in your slides or a similar grid-world scenario where an agent moves between states and receives rewards).
+
     Suppose the Q-learning update rule is: `Q(s, a) ← Q(s, a) + α * [R + γ * max_{a'} Q(s', a') - Q(s, a)]`
     Given:
     *   Current state `s` = Room 3
@@ -2011,6 +2013,7 @@ b)  Consider the "Lizard Game" (as described in your slides or a similar grid-wo
     *   Current `Q(Room 3, Move to Room 1)` = 50
     *   Q-values for the next state (Room 1): `Q(Room 1, Move to Room 5)` = 100, `Q(Room 1, Move to Room 3)` = 0
     Calculate the updated `Q(Room 3, Move to Room 1)`. Show your working. (5 marks)
+    
 c)  What is meant by "Temporal Difference (TD) learning"? How does Q-learning relate to TD learning? (4 marks)
 
 **(Total: 16 marks)**
@@ -2018,16 +2021,21 @@ c)  What is meant by "Temporal Difference (TD) learning"? How does Q-learning re
 **Answer 2:**
 
 a)  **Markov Decision Process (MDP):**
-    An MDP is defined by five key components (a tuple `(S, A, P, R, γ)`):
-    1.  **S (States):** A finite set of possible states the agent can be in.
-    2.  **A (Actions):** A finite set of actions the agent can take. `A(s)` can denote actions available in state `s`.
-    3.  **P (Transition Probability Function):** `P(s' | s, a)` is the probability of transitioning from state `s` to state `s'` after taking action `a`.
-    4.  **R (Reward Function):** `R(s, a, s')` is the immediate reward received after transitioning from state `s` to state `s'` by taking action `a`.
-    5.  **γ (Discount Factor):** A value between 0 and 1 that discounts future rewards.
+ An MDP is defined by five key components (a tuple `(S, A, P, R, γ)`):
+ 
+ 1.  **S (States):** A finite set of possible states the agent can be in.
+ 
+ 2.  **A (Actions):** A finite set of actions the agent can take. `A(s)` can denote actions available in state `s`.
+ 
+ 3.  **P (Transition Probability Function):** `P(s' | s, a)` is the probability of transitioning from state `s` to state `s'` after taking action `a`.
+ 
+ 4.  **R (Reward Function):** `R(s, a, s')` is the immediate reward received after transitioning from state `s` to state `s'` by taking action `a`.
+ 
+ 5.  **γ (Discount Factor):** A value between 0 and 1 that discounts future rewards.
 
-    **Markov Property:** The Markov property states that the future state and reward depend only on the current state and the current action, and not on the entire history of past states and actions. Mathematically, `P(S_{t+1}, R_{t+1} | S_t, A_t, S_{t-1}, A_{t-1}, ...) = P(S_{t+1}, R_{t+1} | S_t, A_t)`.
+ **Markov Property:** The Markov property states that the future state and reward depend only on the current state and the current action, and not on the entire history of past states and actions. Mathematically, `P(S_{t+1}, R_{t+1} | S_t, A_t, S_{t-1}, A_{t-1}, ...) = P(S_{t+1}, R_{t+1} | S_t, A_t)`.
 
-    **Significance in Simplifying RL Problems:** The Markov property greatly simplifies RL problems because the agent does not need to remember the entire history of its interactions to make optimal decisions. The current state encapsulates all necessary information to predict the future. This reduces the complexity of the state space and allows for the development of tractable algorithms like dynamic programming and many model-free methods (like Q-learning) that can learn optimal policies by focusing only on current state-action values.
+ **Significance in Simplifying RL Problems:** The Markov property greatly simplifies RL problems because the agent does not need to remember the entire history of its interactions to make optimal decisions. The current state encapsulates all necessary information to predict the future. This reduces the complexity of the state space and allows for the development of tractable algorithms like dynamic programming and many model-free methods (like Q-learning) that can learn optimal policies by focusing only on current state-action values.
 
 b)  **Q-Learning Update Calculation:**
     Given:
@@ -2039,36 +2047,28 @@ b)  **Q-Learning Update Calculation:**
     *   Next state `s'` = Room 1
     *   Possible actions from Room 1 and their Q-values: `Q(Room 1, Move to Room 5)` = 100, `Q(Room 1, Move to Room 3)` = 0
 
-    1.  **Calculate `max_{a'} Q(s', a')`:**
-        This is the maximum Q-value for the next state (Room 1) over all possible next actions.
-        `max_{a'} Q(Room 1, a') = max(Q(Room 1, Move to Room 5), Q(Room 1, Move to Room 3))`
-        `max_{a'} Q(Room 1, a') = max(100, 0) = 100`
+ 1.  **Calculate `max_{a'} Q(s', a')`:**
+     This is the maximum Q-value for the next state (Room 1) over all possible next actions.
+     `max_{a'} Q(Room 1, a') = max(Q(Room 1, Move to Room 5), Q(Room 1, Move to Room 3))`
+     `max_{a'} Q(Room 1, a') = max(100, 0) = 100`
 
-    2.  **Apply Q-learning update rule:**
-        `Q(s, a) ← Q(s, a) + α * [R + γ * max_{a'} Q(s', a') - Q(s, a)]`
-        `Q(Room 3, Move to Room 1) ← 50 + 0.1 * [0 + 0.9 * 100 - 50]`
-        `Q(Room 3, Move to Room 1) ← 50 + 0.1 * [0 + 90 - 50]`
-        `Q(Room 3, Move to Room 1) ← 50 + 0.1 * [40]`
-        `Q(Room 3, Move to Room 1) ← 50 + 4`
-        `Q(Room 3, Move to Room 1) ← 54`
+ 2.  **Apply Q-learning update rule:**
+     `Q(s, a) ← Q(s, a) + α * [R + γ * max_{a'} Q(s', a') - Q(s, a)]`
+     `Q(Room 3, Move to Room 1) ← 50 + 0.1 * [0 + 0.9 * 100 - 50]`
+     `Q(Room 3, Move to Room 1) ← 50 + 0.1 * [0 + 90 - 50]`
+     `Q(Room 3, Move to Room 1) ← 50 + 0.1 * [40]`
+     `Q(Room 3, Move to Room 1) ← 50 + 4`
+     `Q(Room 3, Move to Room 1) ← 54`
 
-    The updated `Q(Room 3, Move to Room 1)` is 54.
+ The updated `Q(Room 3, Move to Room 1)` is 54.
 
 c)  **Temporal Difference (TD) Learning:**
     Temporal Difference (TD) learning is a class of model-free reinforcement learning methods that learn by **bootstrapping**. This means they update their estimates of value functions based on other learned estimates, rather than waiting for the final outcome of an episode (as in Monte Carlo methods). TD methods update value estimates based on the difference between the current estimate and a new estimate derived from subsequent rewards and state values (the "TD error").
 
-    **Q-learning's Relation to TD Learning:**
-    Q-learning is a prominent example of TD learning, specifically TD(0) control. The Q-learning update rule:
-    `Q(s, a) ← Q(s, a) + α * [R + γ * max_{a'} Q(s', a') - Q(s, a)]`
-    The term `[R + γ * max_{a'} Q(s', a') - Q(s, a)]` is the TD error. It's the difference between the "TD target" (`R + γ * max_{a'} Q(s', a')`, which is an improved estimate of `Q(s,a)`) and the current estimate `Q(s,a)`. Q-learning uses this error to update its Q-value estimates after each step in the environment, learning from incomplete episodes.
-
----
-
-These materials should provide a solid foundation for your Reinforcement Learning chapter. Focus on understanding the core concepts, the interplay of different components (agent, environment, policy, value), and the mechanics of key algorithms like Q-learning. Good luck!
-
-
-
-Okay, let's create your revision materials for **Chapter 12: Parallel Computing**, based on your provided lecture slides (`P11 - Parallel Computing.pptx`). Since specific past exam questions for this exact topic might be less common in a general Machine Learning course (unless it has a strong systems focus), we'll emphasize understanding the core concepts, taxonomies, and architectures presented.
+ **Q-learning's Relation to TD Learning:**
+ Q-learning is a prominent example of TD learning, specifically TD(0) control. The Q-learning update rule:
+ `Q(s, a) ← Q(s, a) + α * [R + γ * max_{a'} Q(s', a') - Q(s, a)]`
+ The term `[R + γ * max_{a'} Q(s', a') - Q(s, a)]` is the TD error. It's the difference between the "TD target" (`R + γ * max_{a'} Q(s', a')`, which is an improved estimate of `Q(s,a)`) and the current estimate `Q(s,a)`. Q-learning uses this error to update its Q-value estimates after each step in the environment, learning from incomplete episodes.
 
 ---
 
