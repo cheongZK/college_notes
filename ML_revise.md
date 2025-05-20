@@ -1953,11 +1953,16 @@ Okay, let's create your revision materials for **Chapter 11: Reinforcement Learn
 A robotics company is developing an intelligent robot capable of navigating a warehouse. The robot must identify objects, pick them up, and transport them to various locations.
 
 a)  Explain how Reinforcement Learning (RL) differs from Supervised Learning (SL) in the context of training this robot. (5 marks)
+
 b)  Describe the key elements of a Reinforcement Learning system (Agent, Environment, State, Action, Reward, Policy) as they would apply to this warehouse robot. (6 marks)
+
 c)  The company decides to use Q-learning to train the robot.
-    i)  What is a Q-table, and what does an entry Q(s,a) represent? (3 marks)
-    ii) Explain the concepts of "exploration" and "exploitation" in Q-learning and why a balance is necessary. (4 marks)
-    iii) Briefly describe the epsilon-greedy strategy for action selection. (3 marks)
+
+ i)  What is a Q-table, and what does an entry Q(s,a) represent? (3 marks)
+ 
+ ii) Explain the concepts of "exploration" and "exploitation" in Q-learning and why a balance is necessary. (4 marks)
+ 
+ iii) Briefly describe the epsilon-greedy strategy for action selection. (3 marks)
 
 **(Total: 21 marks)**
 
