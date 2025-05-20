@@ -1983,17 +1983,17 @@ b)  **Key RL Elements for Warehouse Robot:**
     *   **Policy (π):** The robot's strategy for choosing an action in a given state. For instance, if the robot is in Room A and needs to go to Room C, the policy dictates which direction to move. The goal of RL is to learn an optimal policy.
 
 c)  **Q-learning for the Robot:**
-    i)  **Q-table and Q(s,a):**
-        A Q-table is a data structure, typically a table or matrix, used in Q-learning to store the learned Q-values. Each row of the Q-table corresponds to a possible state `s` in the environment, and each column corresponds to a possible action `a` the agent can take.
-        An entry `Q(s,a)` in the Q-table represents the **expected future cumulative discounted reward** if the agent starts in state `s`, takes action `a`, and then follows the optimal policy thereafter. It essentially quantifies the "quality" or "value" of taking a specific action in a specific state.
+ i)  **Q-table and Q(s,a):**
+     A Q-table is a data structure, typically a table or matrix, used in Q-learning to store the learned Q-values. Each row of the Q-table corresponds to a possible state `s` in the environment, and each column corresponds to a possible action `a` the agent can take.
+     An entry `Q(s,a)` in the Q-table represents the **expected future cumulative discounted reward** if the agent starts in state `s`, takes action `a`, and then follows the optimal policy thereafter. It essentially quantifies the "quality" or "value" of taking a specific action in a specific state.
 
-    ii) **Exploration vs. Exploitation:**
-        *   **Exploration:** Involves the agent trying out new or random actions to discover more about the environment. This is crucial because the agent initially doesn't know which actions lead to high rewards. Without exploration, the agent might get stuck in a suboptimal policy because it never tries actions that could lead to better outcomes.
-        *   **Exploitation:** Involves the agent choosing actions that it currently believes are the best (i.e., those with the highest Q-values) based on its past experience, to maximize its immediate and expected future rewards.
-        **Balance is Necessary:** If the agent only explores, it might find good actions but never capitalize on them to maximize rewards. If it only exploits, it might settle for a suboptimal policy without ever discovering better alternatives. A good RL agent needs to explore enough to find good strategies and then exploit those strategies to achieve high rewards.
+ ii) **Exploration vs. Exploitation:**
+     *   **Exploration:** Involves the agent trying out new or random actions to discover more about the environment. This is crucial because the agent initially doesn't know which actions lead to high rewards. Without exploration, the agent might get stuck in a suboptimal policy because it never tries actions that could lead to better outcomes.
+     *   **Exploitation:** Involves the agent choosing actions that it currently believes are the best (i.e., those with the highest Q-values) based on its past experience, to maximize its immediate and expected future rewards.
+     **Balance is Necessary:** If the agent only explores, it might find good actions but never capitalize on them to maximize rewards. If it only exploits, it might settle for a suboptimal policy without ever discovering better alternatives. A good RL agent needs to explore enough to find good strategies and then exploit those strategies to achieve high rewards.
 
-    iii) **Epsilon-Greedy Strategy:**
-        The epsilon-greedy strategy is a common method to balance exploration and exploitation. The agent chooses a random action (explores) with a small probability `epsilon (ε)`, and with probability `1-ε`, it chooses the action that has the highest estimated Q-value for the current state (exploits). Typically, `epsilon` is set to a higher value initially to encourage exploration and is gradually decayed over time as the agent learns more about the environment, shifting the balance towards exploitation.
+ iii) **Epsilon-Greedy Strategy:**
+     The epsilon-greedy strategy is a common method to balance exploration and exploitation. The agent chooses a random action (explores) with a small probability `epsilon (ε)`, and with probability `1-ε`, it chooses the action that has the highest estimated Q-value for the current state (exploits). Typically, `epsilon` is set to a higher value initially to encourage exploration and is gradually decayed over time as the agent learns more about the environment, shifting the balance towards exploitation.
 
 ---
 
