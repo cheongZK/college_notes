@@ -896,6 +896,7 @@ Okay, let's create the revision notes, flashcards, and mini-tests for **Chapter 
 
 **Chapter 5 Conceptual:**
 6.  What is the fundamental difference in data handling between batch processing and stream processing?
+
 7.  Give an example of an "event" in the context of event streaming for an e-commerce website.
 8.  What is the main benefit of "replication" for Kafka topic partitions?
 9.  In Kafka, what is the role of a "producer"?
