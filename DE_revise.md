@@ -888,6 +888,7 @@ Okay, let's create the revision notes, flashcards, and mini-tests for **Chapter 
 **Questions:**
 
 **Chapter 4 Conceptual:**
+
 1.  What are the three components of the BASE consistency model?
 2.  Name one advantage of NoSQL's flexible schema compared to RDBMS's rigid schema.
 3.  If you have a dataset with many interconnected entities and need to query these connections efficiently, which NoSQL database type is most suitable?
@@ -895,8 +896,8 @@ Okay, let's create the revision notes, flashcards, and mini-tests for **Chapter 
 5.  What is the primary goal of sharding a NoSQL database?
 
 **Chapter 5 Conceptual:**
-6.  What is the fundamental difference in data handling between batch processing and stream processing?
 
+6.  What is the fundamental difference in data handling between batch processing and stream processing?
 7.  Give an example of an "event" in the context of event streaming for an e-commerce website.
 8.  What is the main benefit of "replication" for Kafka topic partitions?
 9.  In Kafka, what is the role of a "producer"?
@@ -907,6 +908,7 @@ Okay, let's create the revision notes, flashcards, and mini-tests for **Chapter 
 **Answers:**
 
 **Chapter 4 Conceptual:**
+
 1.  Basically Available, Soft state, Eventually consistent.
 2.  It allows for easier evolution of the data structure, accommodating new or varying attributes without requiring schema migrations for the entire database.
 3.  Graph Database.
@@ -914,6 +916,7 @@ Okay, let's create the revision notes, flashcards, and mini-tests for **Chapter 
 5.  To distribute data across multiple servers (shards) to improve scalability (both storage and write performance) and potentially fault tolerance.
 
 **Chapter 5 Conceptual:**
+
 6.  Batch processing operates on large, bounded datasets collected over time, while stream processing operates on unbounded, continuous data as it arrives.
 7.  A customer adding an item to their cart, a customer completing a purchase, a product view, a search query.
 8.  Fault tolerance and high availability (if a broker holding a leader partition fails, a replica can take over).
