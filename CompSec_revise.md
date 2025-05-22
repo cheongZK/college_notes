@@ -739,32 +739,45 @@ I'll use the provided OCR text from your slides as the primary source.
 **Section A: Short Answer & Concepts (Attempt ALL questions)**
 
 1.  **(a)** Define "Computer Security" based on the NIST definition provided in your course materials (Chapter 1, Slide 4). (3 marks)
-    ** (b)** Briefly explain the six principles of security: Confidentiality, Authentication, Integrity, Non-Repudiation, Access Control, and Availability. (12 marks)
+
+** (b)** Briefly explain the six principles of security: Confidentiality, Authentication, Integrity, Non-Repudiation, Access Control, and Availability. (12 marks)
 
 2.  With reference to Physical Security (Chapter 6):
     **(a)** Describe two complementary requirements of physical security. (4 marks)
+    
     **(b)** Explain how a mantrap enhances physical access control. (3 marks)
+    
     **(c)** List three types of sensors used in external perimeter defenses and briefly state their purpose. (3 marks)
 
-3.  **Malware (Chapter 2):**
+4.  **Malware (Chapter 2):**
     **(a)** Differentiate between a file-based virus and a fileless virus in terms of their operation and detection challenges. (6 marks)
+    
     **(b)** Explain the primary function of a Rootkit and why it is particularly difficult to detect. (4 marks)
 
 **Section B: Scenarios & Application (Attempt ALL questions)**
 
 4.  **Cryptography (Chapter 3):**
     **(a)** A company needs to ensure that financial transaction messages sent between its branches are not tampered with during transmission and that the sending branch can be verified.
+    
         **(i)** Which cryptographic technique should they primarily use to achieve these goals? (1 mark)
+    
         **(ii)** Briefly outline the steps involved in applying this technique for a message sent from Branch A to Branch B. (6 marks)
+    
     **(b)** Compare and contrast symmetric (e.g., AES) and asymmetric (e.g., RSA) encryption, highlighting one key advantage and one key disadvantage of each. (8 marks)
+    
     **(c)** Briefly explain the purpose of the Diffie-Hellman key exchange algorithm. (3 marks)
 
-5.  **Access Control & Authentication (Chapter 4):**
+6.  **Access Control & Authentication (Chapter 4):**
     **(a)** An organization is designing its access control system. They are considering DAC, MAC, and RBAC.
+    
         **(i)** For a highly sensitive government database where data classification and user clearances are paramount, which model would be most appropriate and why? (3 marks)
+    
         **(ii)** For managing permissions for a large number of users in a typical corporate environment with defined job functions (e.g., Sales, HR, IT Support), which model would be most efficient and why? (3 marks)
+    
     **(b)** An online banking application requires users to authenticate.
+    
         **(i)** Propose a robust multifactor authentication (MFA) setup for this application, naming at least two distinct factors and the specific technologies/methods for each. (4 marks)
+    
         **(ii)** Explain one common attack against password authentication and one countermeasure to mitigate it (other than MFA). (5 marks)
 
 ---
@@ -774,6 +787,7 @@ I'll use the provided OCR text from your slides as the primary source.
 **Section A:**
 
 1.  **(a) Computer Security (NIST):** The protection afforded to an automated information system to attain the applicable objectives of preserving the integrity, availability, and confidentiality of information system resources (includes hardware, software, firmware, information/data, and telecommunications).
+
     **(b) Six Principles:**
     *   **Confidentiality:** Only sender and intended recipient(s) access message content. Prevents unauthorized disclosure.
     *   **Authentication:** Establishes proof of identities. Ensures origin of message/document is correctly identified.
@@ -785,13 +799,15 @@ I'll use the provided OCR text from your slides as the primary source.
 2.  **(a) Physical Security Requirements:**
     *   Prevent damage to physical infrastructure.
     *   Prevent physical infrastructure misuse that leads to misuse/damage of protected information.
+    
     **(b) Mantrap:** An air gap with two interlocking doors. Only one door can be open at any time, controlling passage between a nonsecure and a secure area, preventing tailgating and ensuring only authorized individuals pass through one at a time.
+
     **(c) Sensors:**
     *   Motion detectors: Detect movement in a restricted area.
     *   Noise detectors: Detect suspicious noises.
     *   Proximity detectors: Detect presence of an object when it enters the sensor's field.
 
-3.  **(a) File-based vs. Fileless Virus:**
+4.  **(a) File-based vs. Fileless Virus:**
     *   **File-based:** Attaches to executable files. Spreads when infected file is shared and run. Replicates on the same computer. *Detection:* Antivirus can scan files for known signatures.
     *   **Fileless:** Does not write to disk as a traditional file. Resides in memory (RAM). Uses legitimate system tools (LOLBins) to execute. Spreads often via exploits or scripts. *Detection Challenge:* No file to scan, uses legitimate tools which are harder to flag as malicious, RAM analysis needed.
     **(b) Rootkit:** Hides its presence and other malware. Accesses low levels of the OS or uses undocumented functions to modify system behavior, making itself and other malware invisible to the OS and standard antimalware tools.
@@ -799,6 +815,7 @@ I'll use the provided OCR text from your slides as the primary source.
 **Section B:**
 
 4.  **(a) (i) Cryptographic Technique:** Digital Signatures (using asymmetric cryptography and hashing).
+
     **(a) (ii) Steps for Digital Signature (Branch A to Branch B):**
     1.  Branch A creates the financial transaction message.
     2.  Branch A calculates a hash (digest) of the message.
@@ -808,6 +825,7 @@ I'll use the provided OCR text from your slides as the primary source.
     6.  Branch B decrypts the signature using Branch A's *public key* to retrieve the original hash.
     7.  Branch B calculates a new hash of the received message.
     8.  Branch B compares the new hash with the decrypted hash. If they match, the message is authentic (from Branch A) and has integrity (not tampered).
+    
     **(b) Symmetric vs. Asymmetric Encryption:**
     *   **Symmetric (e.g., AES):**
         *   *Key Usage:* Uses a single, shared secret key for both encryption and decryption.
@@ -817,15 +835,19 @@ I'll use the provided OCR text from your slides as the primary source.
         *   *Key Usage:* Uses a pair of keys: a public key (for encryption or signature verification) and a private key (for decryption or signature creation).
         *   *Advantage:* Solves the key distribution problem (public key can be shared openly); enables digital signatures for authentication and non-repudiation.
         *   *Disadvantage:* Slower than symmetric encryption, computationally more intensive.
+   
     **(c) Diffie-Hellman:** Enables two parties, without any prior shared secret, to establish a shared secret key over an insecure communication channel. This shared secret key can then be used for symmetric encryption.
 
 5.  **(a) (i) Highly Sensitive Government Database:** MAC (Mandatory Access Control). Because MAC enforces a centrally managed security policy based on classifications (labels on data) and clearances (for users), which cannot be overridden by users. This is ideal for environments where information control is strict and based on sensitivity levels.
+
     **(a) (ii) Corporate Environment with Job Functions:** RBAC (Role-Based Access Control). Because permissions are assigned to roles (e.g., Sales_Manager, HR_Specialist) and users are assigned to these roles. This simplifies administration as permissions are managed at the role level, not for individual users, which is efficient for large organizations with defined job responsibilities.
+
     **(b) (i) MFA for Online Banking:**
     *   **Factor 1 (Something you know):** Strong, unique password.
     *   **Factor 2 (Something you have):**
         *   *Method 1:* Time-based One-Time Password (TOTP) generated by an authenticator app on a smartphone (e.g., Google Authenticator, Authy).
         *   *Method 2 (More Secure):* A hardware security key (e.g., YubiKey) that performs cryptographic operations and requires physical presence (USB/NFC).
+    
     **(b) (ii) Password Attack & Countermeasure:**
     *   **Attack:** Dictionary Attack (or Brute Force Attack). Attacker tries common words (or all combinations) as passwords, hashing them and comparing against a stolen password hash file.
     *   **Countermeasure (other than MFA):**
