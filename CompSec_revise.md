@@ -749,7 +749,7 @@ I'll use the provided OCR text from your slides as the primary source.
     
     **(c)** List three types of sensors used in external perimeter defenses and briefly state their purpose. (3 marks)
 
-4.  **Malware (Chapter 2):**
+3.  **Malware (Chapter 2):**
     **(a)** Differentiate between a file-based virus and a fileless virus in terms of their operation and detection challenges. (6 marks)
     
     **(b)** Explain the primary function of a Rootkit and why it is particularly difficult to detect. (4 marks)
@@ -759,26 +759,26 @@ I'll use the provided OCR text from your slides as the primary source.
 4.  **Cryptography (Chapter 3):**
     **(a)** A company needs to ensure that financial transaction messages sent between its branches are not tampered with during transmission and that the sending branch can be verified.
     
-        **(i)** Which cryptographic technique should they primarily use to achieve these goals? (1 mark)
-    
-        **(ii)** Briefly outline the steps involved in applying this technique for a message sent from Branch A to Branch B. (6 marks)
+     **(i)** Which cryptographic technique should they primarily use to achieve these goals? (1 mark)
+ 
+     **(ii)** Briefly outline the steps involved in applying this technique for a message sent from Branch A to Branch B. (6 marks)
     
     **(b)** Compare and contrast symmetric (e.g., AES) and asymmetric (e.g., RSA) encryption, highlighting one key advantage and one key disadvantage of each. (8 marks)
     
     **(c)** Briefly explain the purpose of the Diffie-Hellman key exchange algorithm. (3 marks)
 
-6.  **Access Control & Authentication (Chapter 4):**
+5.  **Access Control & Authentication (Chapter 4):**
     **(a)** An organization is designing its access control system. They are considering DAC, MAC, and RBAC.
     
-        **(i)** For a highly sensitive government database where data classification and user clearances are paramount, which model would be most appropriate and why? (3 marks)
-    
-        **(ii)** For managing permissions for a large number of users in a typical corporate environment with defined job functions (e.g., Sales, HR, IT Support), which model would be most efficient and why? (3 marks)
+     **(i)** For a highly sensitive government database where data classification and user clearances are paramount, which model would be most appropriate and why? (3 marks)
+ 
+     **(ii)** For managing permissions for a large number of users in a typical corporate environment with defined job functions (e.g., Sales, HR, IT Support), which model would be most efficient and why? (3 marks)
     
     **(b)** An online banking application requires users to authenticate.
     
-        **(i)** Propose a robust multifactor authentication (MFA) setup for this application, naming at least two distinct factors and the specific technologies/methods for each. (4 marks)
-    
-        **(ii)** Explain one common attack against password authentication and one countermeasure to mitigate it (other than MFA). (5 marks)
+     **(i)** Propose a robust multifactor authentication (MFA) setup for this application, naming at least two distinct factors and the specific technologies/methods for each. (4 marks)
+ 
+     **(ii)** Explain one common attack against password authentication and one countermeasure to mitigate it (other than MFA). (5 marks)
 
 ---
 
