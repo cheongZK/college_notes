@@ -721,7 +721,7 @@ Okay, here are example inputs and outputs for the NoSQL shell commands listed, c
 
 ---
 
-## Redis
+#### Redis
 
 **Initial State:** Assume an empty Redis instance unless specified.
 
@@ -879,7 +879,7 @@ Okay, here are example inputs and outputs for the NoSQL shell commands listed, c
 
 ---
 
-## MongoDB
+#### MongoDB
 
 **Initial State:** Assume a MongoDB instance is running. `>` indicates the mongo shell prompt.
 
@@ -959,7 +959,7 @@ Okay, here are example inputs and outputs for the NoSQL shell commands listed, c
         ```
     *   **State After:** All documents in `products` with `category: "Electronics"` will now have an additional field `inStock: true`.
 
-### MongoDB Operators (used within `find`, `updateMany`, etc.)
+##### MongoDB Operators (used within `find`, `updateMany`, etc.)
 
 Let's assume the `products` collection has the documents from above.
 
@@ -1008,7 +1008,7 @@ Let's assume the `products` collection has the documents from above.
 
 ---
 
-## Neo4j Cypher Query Language
+#### Neo4j Cypher Query Language
 
 **Initial State:** Assume an empty Neo4j database. Cypher queries are typically run in the Neo4j Browser or via a driver. The output shown is conceptual; actual Neo4j Browser output is tabular.
 
@@ -1094,7 +1094,7 @@ Let's assume the `products` collection has the documents from above.
 
 ---
 
-## HBase
+#### HBase
 
 **Initial State:** Assume an HBase instance is running. Commands are run in the HBase shell.
 Output messages can vary slightly.
