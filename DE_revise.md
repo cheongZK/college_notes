@@ -711,487 +711,277 @@ Okay, let's create the revision notes, flashcards, and mini-tests for **Chapter 
 *   **HBase:** `create`, `disable`, `enable`, `alter`, `describe`, `list`, `put`, `get`, `scan`, `count`.
 
 
-Okay, here are example inputs and outputs for the NoSQL shell commands listed, categorized by the database system.
-
-**Note:**
-*   Outputs can sometimes vary slightly depending on the shell version or specific configuration.
-*   For commands that modify data, the "Output" often shows a confirmation, and the "State After" (or implied state) shows the result of the operation.
-*   Placeholders like `ObjectId("...")` represent system-generated IDs.
-*   Timestamps in HBase output are omitted for brevity but are always present.
+Okay, here are example uses for all the commands listed, categorized by the NoSQL database.
 
 ---
 
-#### Redis
+**Redis**
 
-**Initial State:** Assume an empty Redis instance unless specified.
+**1. `SET key value`**
+   - **Example Use:** `SET user:100:name "Alice Wonderland"`
+   - **Explanation:** Stores the string "Alice Wonderland" associated with the key "user:100:name". If "user:100:name" already exists, its value is overwritten.
 
-1.  **SET key value**
-    *   **Command:** `SET mykey "Hello Redis"`
-    *   **Example Input:** `SET user:1:name "Alice"`
-    *   **Example Output:** `OK`
-    *   **State After:** Key `user:1:name` stores the string value `"Alice"`.
+**2. `GET key`**
+   - **Example Use:** `GET user:100:name`
+   - **Explanation:** Retrieves the value associated with "user:100:name". If the previous `SET` command was run, this would return "Alice Wonderland".
 
-2.  **GET key**
-    *   **Command:** `GET mykey`
-    *   **Example Input (key exists):** `GET user:1:name`
-    *   **Example Output:** `"Alice"`
-    *   **Example Input (key does not exist):** `GET user:2:name`
-    *   **Example Output:** `(nil)`
+**3. `APPEND key value`**
+   - **Example Use:**
+     ```
+     SET greeting "Hello"
+     APPEND greeting " World"
+     ```
+   - **Explanation:** First, "greeting" is set to "Hello". Then, " World" is appended to it. The key "greeting" now holds "Hello World". If "greeting" didn't exist before `APPEND`, it would be created with the value " World".
 
-3.  **APPEND key value**
-    *   **Command:** `APPEND mykey " World"`
-    *   **Example Input (key exists):**
-        ```redis
-        SET greeting "Hello"
-        APPEND greeting " World"
-        ```
-    *   **Example Output (for APPEND):** `(integer) 11` (the new length of the string)
-    *   **State After:** Key `greeting` stores `"Hello World"`.
-    *   **Example Input (key does not exist):** `APPEND newmessage "Start"`
-    *   **Example Output:** `(integer) 5`
-    *   **State After:** Key `newmessage` stores `"Start"`.
+**4. `STRLEN key`**
+   - **Example Use:** `STRLEN greeting`
+   - **Explanation:** Assuming "greeting" holds "Hello World" (11 characters), this command returns `11`.
 
-4.  **STRLEN key**
-    *   **Command:** `STRLEN mykey`
-    *   **Example Input:** (Assuming `greeting` is `"Hello World"`)
-        `STRLEN greeting`
-    *   **Example Output:** `(integer) 11`
+**5. `RPUSH key value1 [value2 ...]`**
+   - **Example Use:** `RPUSH my_tasks "buy_groceries" "call_mom" "read_book"`
+   - **Explanation:** Appends "buy_groceries", then "call_mom", then "read_book" to the tail of a list named "my_tasks". If "my_tasks" doesn't exist, it's created. The list would be: `["buy_groceries", "call_mom", "read_book"]`.
 
-5.  **RPUSH key value1 [value2 ...]**
-    *   **Command:** `RPUSH mylist "one" "two" "three"`
-    *   **Example Input:** `RPUSH tasks "task1" "task2"`
-    *   **Example Output:** `(integer) 2` (the new length of the list)
-    *   **State After:** List `tasks` contains `["task1", "task2"]`.
-    *   **Example Input (adding more):** `RPUSH tasks "task3"`
-    *   **Example Output:** `(integer) 3`
-    *   **State After:** List `tasks` contains `["task1", "task2", "task3"]`.
+**6. `LPOP key`**
+   - **Example Use:** `LPOP my_tasks`
+   - **Explanation:** Removes and returns the first element ("buy_groceries") from the list "my_tasks". The list "my_tasks" becomes `["call_mom", "read_book"]`.
 
-6.  **LPOP key**
-    *   **Command:** `LPOP mylist`
-    *   **Example Input:** (Assuming `tasks` is `["task1", "task2", "task3"]`)
-        `LPOP tasks`
-    *   **Example Output:** `"task1"`
-    *   **State After:** List `tasks` contains `["task2", "task3"]`.
-    *   **Example Input (empty list):** (Assuming `emptylist` does not exist or is empty)
-        `LPOP emptylist`
-    *   **Example Output:** `(nil)`
+**7. `RPOP key`** (Continued from Page 1, shown on Page 2)
+   - **Example Use:** `RPOP my_tasks`
+   - **Explanation:** Assuming "my_tasks" is `["call_mom", "read_book"]`, this removes and returns the last element ("read_book"). The list "my_tasks" becomes `["call_mom"]`.
 
-7.  **RPOP key**
-    *   **Command:** `RPOP mylist`
-    *   **Example Input:** (Assuming `tasks` is `["task2", "task3"]`)
-        `RPOP tasks`
-    *   **Example Output:** `"task3"`
-    *   **State After:** List `tasks` contains `["task2"]`.
+**8. `LRANGE key start stop`**
+   - **Example Use:** `LRANGE my_tasks 0 -1`
+   - **Explanation:** Retrieves all elements from the list "my_tasks". If "my_tasks" is `["call_mom"]`, it returns `["call_mom"]`.
+   - **Another Example:** `RPUSH items "a" "b" "c" "d" "e"`; then `LRANGE items 1 3` would return `["b", "c", "d"]`. (0-indexed)
 
-8.  **LRANGE key start stop**
-    *   **Command:** `LRANGE mylist 0 -1`
-    *   **Example Input:** (Assuming `tasks` is `["task2"]` and we add more: `RPUSH tasks "another" "final"`)
-        `RPUSH tasks "another" "final"` (Output: `(integer) 3`)
-        `LRANGE tasks 0 1`
-    *   **Example Output (for LRANGE):**
-        ```
-        1) "task2"
-        2) "another"
-        ```
-    *   **Example Input (get all):** `LRANGE tasks 0 -1`
-    *   **Example Output:**
-        ```
-        1) "task2"
-        2) "another"
-        3) "final"
-        ```
+**9. `HSET key field value`**
+   - **Example Use:** `HSET user:101 profile:name "Bob The Builder" profile:city "Springfield"`
+   - **Explanation:** Sets the field "profile:name" to "Bob The Builder" and "profile:city" to "Springfield" within the hash stored at key "user:101". If "user:101" doesn't exist, it's created as a hash.
 
-9.  **HSET key field value**
-    *   **Command:** `HSET user:1 username "JohnDoe" email "john.doe@example.com"`
-    *   **Example Input:** `HSET user:profile:100 name "Bob" age "25"`
-    *   **Example Output:** `(integer) 2` (number of fields added/updated)
-    *   **State After:** Hash `user:profile:100` contains fields `name: "Bob"` and `age: "25"`.
+**10. `HGET key field`**
+    - **Example Use:** `HGET user:101 profile:name`
+    - **Explanation:** Retrieves the value of the field "profile:name" from the hash "user:101". This would return "Bob The Builder".
 
-10. **HGET key field**
-    *   **Command:** `HGET user:1 username`
-    *   **Example Input:** `HGET user:profile:100 name`
-    *   **Example Output:** `"Bob"`
-    *   **Example Input (field does not exist):** `HGET user:profile:100 city`
-    *   **Example Output:** `(nil)`
+**11. `HGETALL key`**
+    - **Example Use:** `HGETALL user:101`
+    - **Explanation:** Returns all fields and their values from the hash "user:101". Might return an array like `["profile:name", "Bob The Builder", "profile:city", "Springfield"]`.
 
-11. **HGETALL key**
-    *   **Command:** `HGETALL user:1`
-    *   **Example Input:** `HGETALL user:profile:100`
-    *   **Example Output:**
-        ```
-        1) "name"
-        2) "Bob"
-        3) "age"
-        4) "25"
-        ```
-        (An array of field names and values, interleaved)
+**12. `SADD key member [member ...]`**
+    - **Example Use:** `SADD user:101:hobbies "coding" "hiking" "photography" "coding"`
+    - **Explanation:** Adds "coding", "hiking", and "photography" to the set "user:101:hobbies". "coding" is added only once as sets store unique members.
 
-12. **SADD key member [member ...]**
-    *   **Command:** `SADD myset "apple" "banana" "cherry"`
-    *   **Example Input:** `SADD user:100:tags "sports" "music" "movies" "music"`
-    *   **Example Output:** `(integer) 3` (number of new members added; "music" was a duplicate)
-    *   **State After:** Set `user:100:tags` contains `{"sports", "music", "movies"}`.
+**13. `SMEMBERS key`**
+    - **Example Use:** `SMEMBERS user:101:hobbies`
+    - **Explanation:** Retrieves all members from the set "user:101:hobbies". Might return `["coding", "hiking", "photography"]` (order is not guaranteed).
 
-13. **SMEMBERS key**
-    *   **Command:** `SMEMBERS myset`
-    *   **Example Input:** `SMEMBERS user:100:tags`
-    *   **Example Output:** (Order is not guaranteed)
-        ```
-        1) "music"
-        2) "sports"
-        3) "movies"
-        ```
+**14. `SISMEMBER key member`**
+    - **Example Use:** `SISMEMBER user:101:hobbies "hiking"`
+    - **Explanation:** Returns `1` because "hiking" is a member of the set.
+    - **Another Example:** `SISMEMBER user:101:hobbies "swimming"` would return `0`.
 
-14. **SISMEMBER key member**
-    *   **Command:** `SISMEMBER myset "apple"`
-    *   **Example Input (member exists):** `SISMEMBER user:100:tags "music"`
-    *   **Example Output:** `(integer) 1`
-    *   **Example Input (member does not exist):** `SISMEMBER user:100:tags "travel"`
-    *   **Example Output:** `(integer) 0`
+**15. `TTL key`**
+    - **Example Use (after setting an expiry):**
+      ```
+      SET temp_key "some_value"
+      EXPIRE temp_key 60
+      TTL temp_key
+      ```
+    - **Explanation:** `TTL temp_key` would return a value less than or equal to 60 (seconds remaining). If `EXPIRE` was not set, `TTL temp_key` would return `-1`. If `temp_key` did not exist, it would return `-2`.
 
-15. **TTL key**
-    *   **Command:** `TTL mykey`
-    *   **Example Input (key with expiration):**
-        ```redis
-        SET tempkey "will expire"
-        EXPIRE tempkey 60
-        TTL tempkey
-        ```
-    *   **Example Output (for TTL):** `(integer) 59` (or slightly less, seconds remaining)
-    *   **Example Input (key without expiration):**
-        ```redis
-        SET permkey "permanent"
-        TTL permkey
-        ```
-    *   **Example Output (for TTL):** `(integer) -1`
-    *   **Example Input (key does not exist):** `TTL non_existent_key`
-    *   **Example Output:** `(integer) -2`
-
-16. **EXPIRE key seconds**
-    *   **Command:** `EXPIRE mykey 30`
-    *   **Example Input:**
-        ```redis
-        SET session:123 "userdata"
-        EXPIRE session:123 3600
-        ```
-    *   **Example Output (for EXPIRE):** `(integer) 1` (1 if timeout was set, 0 if key doesn't exist)
-    *   **State After:** `session:123` will be deleted after 3600 seconds.
+**16. `EXPIRE key seconds`**
+    - **Example Use:** `EXPIRE user:session:abcxyz 3600`
+    - **Explanation:** Sets the key "user:session:abcxyz" to automatically delete after 3600 seconds (1 hour).
 
 ---
 
-#### MongoDB
+**MongoDB**
 
-**Initial State:** Assume a MongoDB instance is running. `>` indicates the mongo shell prompt.
+**1. `use database_name`**
+   - **Example Use:** `use myCompanyDB`
+   - **Explanation:** Switches the current database context to "myCompanyDB". If "myCompanyDB" doesn't exist, MongoDB prepares to create it upon the first data insertion or collection creation.
 
-1.  **use database_name**
-    *   **Command:** `use mydatabase`
-    *   **Example Input:** `> use storeDB`
-    *   **Example Output:** `switched to db storeDB`
-    *   **State After:** The current database context is set to `storeDB`. If it didn't exist, it's created upon first data insertion.
+**2. `db.createCollection("collection_name")`**
+   - **Example Use:** `db.createCollection("employees")`
+   - **Explanation:** Explicitly creates a new collection named "employees" in the current database (e.g., "myCompanyDB").
 
-2.  **db.createCollection("collection_name")**
-    *   **Command:** `db.createCollection("products")`
-    *   **Example Input:** `> db.createCollection("customers")`
-    *   **Example Output:** `{ "ok" : 1 }`
-    *   **State After:** An empty collection named `customers` is created in the current database (`storeDB`).
+**3. `db.collection_name.drop()`**
+   - **Example Use:** `db.employees.drop()`
+   - **Explanation:** Removes the "employees" collection and all its documents from the current database.
 
-3.  **db.collection_name.drop()**
-    *   **Command:** `db.products.drop()`
-    *   **Example Input:** `> db.customers.drop()`
-    *   **Example Output:** `true`
-    *   **State After:** The `customers` collection and all its documents are removed.
+**4. `db.dropDatabase()`**
+   - **Example Use:** `db.dropDatabase()`
+   - **Explanation:** Removes the entire current database (e.g., "myCompanyDB") and all its collections. Use with caution!
 
-4.  **db.dropDatabase()**
-    *   **Command:** `db.dropDatabase()`
-    *   **Example Input:** (Assuming current DB is `storeDB`)
-        `> db.dropDatabase()`
-    *   **Example Output:** `{ "dropped" : "storeDB", "ok" : 1 }`
-    *   **State After:** The entire `storeDB` database is deleted.
+**5. `db.collection_name.insertOne({ key: value })`**
+   - **Example Use:** `db.employees.insertOne({ name: "John Doe", department: "HR", salary: 60000 })`
+   - **Explanation:** Inserts a single document into the "employees" collection.
 
-5.  **db.collection_name.insertOne({ key: value })**
-    *   **Command:** `db.users.insertOne({ name: "Alice", age: 30, city: "New York" })`
-    *   **Example Input:** (Assuming `use storeDB` and `db.createCollection("products")` ran)
-        `> db.products.insertOne({ name: "Laptop", price: 1200, category: "Electronics" })`
-    *   **Example Output:**
-        ```json
-        {
-          "acknowledged" : true,
-          "insertedId" : ObjectId("someGeneratedIdValue")
-        }
-        ```
-    *   **State After:** A new document is added to the `products` collection.
+**6. `db.collection_name.insertMany([{ key1: value1 }, { key2: value2 }])`**
+   - **Example Use:**
+     ```javascript
+     db.products.insertMany([
+       { name: "Laptop X1", category: "Electronics", price: 1200 },
+       { name: "Wireless Mouse", category: "Accessories", price: 25 }
+     ])
+     ```
+   - **Explanation:** Inserts multiple documents into the "products" collection.
 
-6.  **db.collection_name.insertMany([...])**
-    *   **Command:** `db.users.insertMany([{ name: "Bob", age: 24 }, { name: "Charlie", age: 35 }])`
-    *   **Example Input:**
-        `> db.products.insertMany([
-        ...   { name: "Mouse", price: 25, category: "Electronics" },
-        ...   { name: "Keyboard", price: 75, category: "Electronics" }
-        ... ])`
-    *   **Example Output:**
-        ```json
-        {
-          "acknowledged" : true,
-          "insertedIds" : [
-            ObjectId("anotherGeneratedId1"),
-            ObjectId("anotherGeneratedId2")
-          ]
-        }
-        ```
-    *   **State After:** Two new documents are added to the `products` collection.
+**7. `db.collection_name.find({ key: value })`**
+   - **Example Use:** `db.employees.find({ department: "HR" })`
+   - **Explanation:** Retrieves all documents from the "employees" collection where the "department" field is "HR".
+   - **To find all documents:** `db.employees.find({})`
 
-7.  **db.collection_name.find({ key: value })**
-    *   **Command:** `db.users.find({ city: "New York" })`
-    *   **Example Input:** `> db.products.find({ category: "Electronics" })`
-    *   **Example Output:** (Will list all matching documents, formatted)
-        ```json
-        { "_id" : ObjectId("someGeneratedIdValue"), "name" : "Laptop", "price" : 1200, "category" : "Electronics" }
-        { "_id" : ObjectId("anotherGeneratedId1"), "name" : "Mouse", "price" : 25, "category" : "Electronics" }
-        { "_id" : ObjectId("anotherGeneratedId2"), "name" : "Keyboard", "price" : 75, "category" : "Electronics" }
-        ```
+**8. `db.collection_name.updateMany({ query_field: query_value }, { $set: { update_field: update_value } })`**
+   - **Example Use:** `db.employees.updateMany({ department: "HR" }, { $set: { location: "Building A" } })`
+   - **Explanation:** Updates all documents in the "employees" collection where "department" is "HR", setting their "location" field to "Building A". If "location" doesn't exist, it's added.
 
-8.  **db.collection_name.updateMany({ query_field: query_value }, { $set: { update_field: update_value } })**
-    *   **Command:** `db.users.updateMany({ city: "New York" }, { $set: { country: "USA" } })`
-    *   **Example Input:** `> db.products.updateMany({ category: "Electronics" }, { $set: { inStock: true } })`
-    *   **Example Output:**
-        ```json
-        { "acknowledged" : true, "matchedCount" : 3, "modifiedCount" : 3 }
-        ```
-    *   **State After:** All documents in `products` with `category: "Electronics"` will now have an additional field `inStock: true`.
+**MongoDB Operators**
 
-##### MongoDB Operators (used within `find`, `updateMany`, etc.)
+These are used within the query part of `find()`, `updateMany()`, etc.
 
-Let's assume the `products` collection has the documents from above.
+**1. `$eq` (Equal)**
+   - **Example Use:** `db.products.find({ price: { $eq: 1200 } })`
+   - **Explanation:** Finds products where the price is exactly 1200. (Often, `{ field: value }` is shorthand for `{ field: { $eq: value } }`).
 
-*   **$eq: { field: { $eq: value } }**
-    *   **Example Input:** `> db.products.find({ price: { $eq: 75 } })`
-    *   **Example Output:**
-        ```json
-        { "_id" : ObjectId("anotherGeneratedId2"), "name" : "Keyboard", "price" : 75, "category" : "Electronics", "inStock" : true }
-        ```
+**2. `$ne` (Not Equal)**
+   - **Example Use:** `db.employees.find({ department: { $ne: "Sales" } })`
+   - **Explanation:** Finds employees not in the "Sales" department.
 
-*   **$ne: { field: { $ne: value } }**
-    *   **Example Input:** `> db.products.find({ name: { $ne: "Laptop" } })`
-    *   **Example Output:** (Mouse and Keyboard documents)
+**3. `$gt` (Greater Than)**
+   - **Example Use:** `db.products.find({ price: { $gt: 1000 } })`
+   - **Explanation:** Finds products with a price greater than 1000.
 
-*   **$gt: { field: { $gt: value } }**
-    *   **Example Input:** `> db.products.find({ price: { $gt: 100 } })`
-    *   **Example Output:** (Laptop document)
+**4. `$gte` (Greater Than or Equal)**
+   - **Example Use:** `db.inventory.find({ quantity: { $gte: 10 } })`
+   - **Explanation:** Finds items in inventory with quantity greater than or equal to 10.
 
-*   **$gte: { field: { $gte: value } }**
-    *   **Example Input:** `> db.products.find({ price: { $gte: 75 } })`
-    *   **Example Output:** (Laptop and Keyboard documents)
+**5. `$lt` (Less Than)**
+   - **Example Use:** `db.reviews.find({ rating: { $lt: 3 } })`
+   - **Explanation:** Finds reviews with a rating less than 3.
 
-*   **$lt: { field: { $lt: value } }**
-    *   **Example Input:** `> db.products.find({ price: { $lt: 100 } })`
-    *   **Example Output:** (Mouse and Keyboard documents)
+**6. `$lte` (Less Than or Equal)**
+   - **Example Use:** `db.orders.find({ items_count: { $lte: 2 } })`
+   - **Explanation:** Finds orders with 2 or fewer items.
 
-*   **$lte: { field: { $lte: value } }**
-    *   **Example Input:** `> db.products.find({ price: { $lte: 25 } })`
-    *   **Example Output:** (Mouse document)
+**7. `$in` (In an array)**
+   - **Example Use:** `db.employees.find({ department: { $in: ["HR", "Finance"] } })`
+   - **Explanation:** Finds employees who are in either the "HR" or "Finance" department.
 
-*   **$in: { field: { $in: [value1, value2] } }**
-    *   **Example Input:** `> db.products.find({ name: { $in: ["Mouse", "Monitor"] } })`
-    *   **Example Output:** (Mouse document, assuming "Monitor" doesn't exist)
+**8. `$and` (Logical AND)**
+   - **Example Use:** `db.products.find({ $and: [ { category: "Electronics" }, { price: { $lt: 500 } } ] })`
+   - **Explanation:** Finds products that are in the "Electronics" category AND have a price less than 500.
+   - **Shorthand for AND on different fields:** `db.products.find({ category: "Electronics", price: { $lt: 500 } })`
 
-*   **$and: { $and: [ { field1: value1 }, { field2: value2 } ] }**
-    *   **Example Input:** `> db.products.find({ $and: [ { price: { $gt: 50 } }, { category: "Electronics" } ] })`
-    *   **Example Output:** (Laptop and Keyboard documents)
+**9. `$or` (Logical OR)**
+   - **Example Use:** `db.users.find({ $or: [ { status: "active" }, { trial_ends_at: { $gt: new Date() } } ] })`
+   - **Explanation:** Finds users who are either "active" OR their trial period has not yet ended.
 
-*   **$or: { $or: [ { field1: value1 }, { field2: value2 } ] }**
-    *   **Example Input:** `> db.products.find({ $or: [ { name: "Laptop" }, { price: { $lt: 30 } } ] })`
-    *   **Example Output:** (Laptop and Mouse documents)
-
-*   **$not: { field: { $not: { $gt: value } } }** (Note: $not is an operator that affects other operators)
-    *   **Example Input:** `> db.products.find({ price: { $not: { $gt: 100 } } })` (i.e., price <= 100)
-    *   **Example Output:** (Mouse and Keyboard documents)
+**10. `$not` (Negates a query expression)**
+    - **Example Use:** `db.products.find({ price: { $not: { $gt: 100 } } })`
+    - **Explanation:** Finds products where the price is NOT greater than 100 (i.e., price is less than or equal to 100).
 
 ---
 
-#### Neo4j Cypher Query Language
+**Neo4j Cypher Query Language**
 
-**Initial State:** Assume an empty Neo4j database. Cypher queries are typically run in the Neo4j Browser or via a driver. The output shown is conceptual; actual Neo4j Browser output is tabular.
+**1. `CREATE (n:Label {property1: value1, property2: value2})`**
+   - **Example Use:** `CREATE (p:Person {name: "Alice", born: 1990, city: "New York"})`
+   - **Explanation:** Creates a new node with the label "Person" and properties name, born, and city.
 
-1.  **CREATE (n:Label {property1: value1, property2: value2})**
-    *   **Command:** `CREATE (p:Person {name: "Alice", age: 30})`
-    *   **Example Input:** `CREATE (m:Movie {title: "The Matrix", released: 1999})`
-    *   **Example Output (Neo4j Browser):** `Added 1 label, created 1 node, set 2 properties.`
-    *   **State After:** A node with label `Movie` and properties `title` and `released` is created.
+**2. `MERGE (n:Label {property: value})`**
+   - **Example Use:** `MERGE (c:City {name: "London"})`
+   - **Explanation:** Looks for a node with label "City" and property `name: "London"`. If it exists, it's matched. If not, it's created. Useful for ensuring uniqueness based on a property.
 
-2.  **MERGE (n:Label {property: value})**
-    *   **Command:** `MERGE (c:City {name: "London"})`
-    *   **Example Input (first time):** `MERGE (u:User {userId: "user123"})`
-    *   **Example Output:** `Added 1 label, created 1 node, set 1 property.`
-    *   **Example Input (second time, same query):** `MERGE (u:User {userId: "user123"})`
-    *   **Example Output:** `(No changes)` or `Matched 1 node, set 0 properties.` (If it finds the node by `userId`)
-    *   **State After:** Ensures a node `User` with `userId: "user123"` exists. Creates it if not found.
+**3. `MATCH (a:Label1), (b:Label2) CREATE (a)-[r:RELATIONSHIP_TYPE {property: value}]->(b)`**
+   - **Example Use:**
+     ```cypher
+     MATCH (p:Person {name: "Alice"}), (c:City {name: "New York"})
+     CREATE (p)-[r:LIVES_IN {since: 2015}]->(c)
+     ```
+   - **Explanation:** Finds the "Person" node named "Alice" and the "City" node named "New York", then creates a directed relationship "LIVES_IN" from Alice to New York with a property "since: 2015".
 
-3.  **MATCH (a:Label1), (b:Label2) CREATE (a)-\[r:RELATIONSHIP_TYPE {property: value}]->(b)**
-    *   **Command:** `MATCH (p:Person {name:"Alice"}), (m:Movie {title:"Inception"}) CREATE (p)-[r:WATCHED {rating: 5}]->(m)`
-    *   **Example Input:** (Assuming Alice node and The Matrix node exist)
-        `CREATE (a:Person {name: "AliceWonders"})`
-        `CREATE (m:Movie {title: "The Matrix"})`
-        `MATCH (p:Person {name: "AliceWonders"}), (mov:Movie {title: "The Matrix"}) CREATE (p)-[rel:REVIEWED {stars: 4}]->(mov)`
-    *   **Example Output (for CREATE relationship):** `Created 1 relationship, set 1 property.`
-    *   **State After:** A `REVIEWED` relationship from "AliceWonders" to "The Matrix" with property `stars: 4` is created.
+**4. `MATCH (a:Label1), (b:Label2) MERGE (a)-[:RELATIONSHIP_TYPE]->(b)`**
+   - **Example Use:**
+     ```cypher
+     MATCH (u:User {email: "alice@example.com"}), (pr:Product {id: "prod123"})
+     MERGE (u)-[:PURCHASED]->(pr)
+     ```
+   - **Explanation:** Finds the User and Product. If a "PURCHASED" relationship already exists between them, it's matched. Otherwise, it's created.
 
-4.  **MATCH (a:Label1), (b:Label2) MERGE (a)-\[:RELATIONSHIP_TYPE]->(b)**
-    *   **Command:** `MATCH (p1:Person {name:"Alice"}), (p2:Person {name:"Bob"}) MERGE (p1)-[f:FRIENDS_WITH]->(p2)`
-    *   **Example Input:** (Assuming AliceWonders and a new Bob node)
-        `CREATE (b:Person {name: "BobBuilder"})`
-        `MATCH (pA:Person {name: "AliceWonders"}), (pB:Person {name: "BobBuilder"}) MERGE (pA)-[:KNOWS]->(pB)`
-    *   **Example Output (first time):** `Created 1 relationship.`
-    *   **Example Output (second time):** `(No changes)`
-    *   **State After:** Ensures a `KNOWS` relationship exists from AliceWonders to BobBuilder.
+**5. `MATCH (n:Label {property1: value1}) RETURN n`**
+   - **Example Use:** `MATCH (p:Person {name: "Alice"}) RETURN p`
+   - **Explanation:** Finds all nodes labeled "Person" with the name "Alice" and returns the entire node(s).
 
-5.  **MATCH (n:Label {property1: value1}) RETURN n**
-    *   **Command:** `MATCH (p:Person {name: "Alice"}) RETURN p`
-    *   **Example Input:** `MATCH (m:Movie {title: "The Matrix"}) RETURN m`
-    *   **Example Output (conceptual table):**
-        ```
-        +---------------------------------------------------+
-        | m                                                 |
-        +---------------------------------------------------+
-        | (:Movie {title: "The Matrix", released: 1999}) |
-        +---------------------------------------------------+
-        ```
+**6. `MATCH (a:Label1)-[r:RELATIONSHIP_TYPE]->(b:Label2) RETURN a, r, b`**
+   - **Example Use:** `MATCH (p:Person)-[rel:LIVES_IN]->(c:City) WHERE p.name = "Alice" RETURN p, rel, c`
+   - **Explanation:** Finds "Person" nodes named "Alice", their "LIVES_IN" relationships, and the "City" nodes they live in. Returns the person node, the relationship, and the city node.
 
-6.  **MATCH (a:Label1)-\[r:RELATIONSHIP_TYPE]->(b:Label2) RETURN a, r, b**
-    *   **Command:** `MATCH (p:Person)-[w:WATCHED]->(m:Movie) WHERE p.name = "Alice" RETURN p, w, m`
-    *   **Example Input:** `MATCH (p:Person {name: "AliceWonders"})-[rev:REVIEWED]->(mov:Movie) RETURN p, rev, mov`
-    *   **Example Output (conceptual table):**
-        ```
-        +----------------------------------------------------+--------------------------+---------------------------------------------------+
-        | p                                                  | rev                      | mov                                               |
-        +----------------------------------------------------+--------------------------+---------------------------------------------------+
-        | (:Person {name: "AliceWonders"})                 | [:REVIEWED {stars: 4}]   | (:Movie {title: "The Matrix", released: 1999}) |
-        +----------------------------------------------------+--------------------------+---------------------------------------------------+
-        ```
+**7. `MATCH (n:Label {property1: value1}) SET n.property2 = value2`**
+   - **Example Use:** `MATCH (p:Person {name: "Alice"}) SET p.born = 1991, p.city = "San Francisco"`
+   - **Explanation:** Finds the "Person" node named "Alice" and updates their "born" property to 1991 and "city" to "San Francisco".
 
-7.  **MATCH (n:Label {property1: value1}) SET n.property2 = value2**
-    *   **Command:** `MATCH (p:Person {name: "Alice"}) SET p.age = 31`
-    *   **Example Input:** `MATCH (m:Movie {title: "The Matrix"}) SET m.genre = "Sci-Fi"`
-    *   **Example Output:** `Set 1 property.`
-    *   **State After:** The "The Matrix" node now has a `genre` property.
+**8. `MATCH (a:Label1)-[r:RELATIONSHIP_TYPE]->(b:Label2) SET r.property = value`**
+   - **Example Use:** `MATCH (:Person {name: "Alice"})-[rel:LIVES_IN {since: 2015}]->(:City {name: "New York"}) SET rel.current_resident = true`
+   - **Explanation:** Finds the specific "LIVES_IN" relationship between Alice and New York (further filtered by the 'since' property on the relationship if needed) and sets a new property "current_resident" to true on that relationship.
 
-8.  **MATCH (a:Label1)-\[r:RELATIONSHIP_TYPE]->(b:Label2) SET r.property = value**
-    *   **Command:** `MATCH (p:Person {name:"Alice"})-[w:WATCHED]->(m:Movie {title:"Inception"}) SET w.rating = 4`
-    *   **Example Input:** `MATCH (:Person {name: "AliceWonders"})-[rev:REVIEWED]->(:Movie {title: "The Matrix"}) SET rev.comments = "Loved it!"`
-    *   **Example Output:** `Set 1 property.`
-    *   **State After:** The `REVIEWED` relationship now has a `comments` property.
-
-9.  **MATCH (n:Label) RETURN n.property**
-    *   **Command:** `MATCH (p:Person {name: "Alice"}) RETURN p.age`
-    *   **Example Input:** `MATCH (m:Movie {title: "The Matrix"}) RETURN m.released`
-    *   **Example Output (conceptual table):**
-        ```
-        +--------------+
-        | m.released   |
-        +--------------+
-        | 1999         |
-        +--------------+
-        ```
+**9. `MATCH (n:Label) RETURN n.property`**
+   - **Example Use:** `MATCH (p:Person) WHERE p.city = "New York" RETURN p.name`
+   - **Explanation:** Finds all "Person" nodes where the city is "New York" and returns only their "name" property.
 
 ---
 
-#### HBase
+**HBase**
+(Commands are typically run in the HBase shell)
 
-**Initial State:** Assume an HBase instance is running. Commands are run in the HBase shell.
-Output messages can vary slightly.
+**1. `create 'table_name', 'column_family1', 'column_family2'`**
+   - **Example Use:** `create 'users', 'personal_data', 'contact_info'`
+   - **Explanation:** Creates a new table named "users" with two column families: "personal_data" and "contact_info".
 
-1.  **create 'table_name', 'column_family1', 'column_family2'**
-    *   **Command:** `create 'mytable', 'cf1', 'cf2'`
-    *   **Example Input:** `create 'employees', 'personal_info', 'job_details'`
-    *   **Example Output:** `0 row(s) in X.XXX seconds` (or similar, indicating table creation)
-    *   **State After:** Table `employees` with column families `personal_info` and `job_details` is created.
+**2. `disable 'table_name'`**
+   - **Example Use:** `disable 'users'`
+   - **Explanation:** Disables the "users" table. This is often a prerequisite for altering a table or deleting it.
 
-2.  **disable 'table_name'**
-    *   **Command:** `disable 'mytable'`
-    *   **Example Input:** `disable 'employees'`
-    *   **Example Output:** `0 row(s) in Y.YYY seconds`
-    *   **State After:** Table `employees` is disabled. Operations like `alter` can now be performed.
+**3. `enable 'table_name'`**
+   - **Example Use:** `enable 'users'`
+   - **Explanation:** Re-enables a previously disabled "users" table, making it available for operations.
 
-3.  **enable 'table_name'**
-    *   **Command:** `enable 'mytable'`
-    *   **Example Input:** `enable 'employees'`
-    *   **Example Output:** `0 row(s) in Z.ZZZ seconds`
-    *   **State After:** Table `employees` is re-enabled.
+**4. `alter 'table_name', 'column_family'` (actually adding a new column family)
+   - **Example Use:** (Table must be disabled first)
+     ```hbase
+     disable 'users'
+     alter 'users', {NAME => 'preferences', VERSIONS => 5}
+     enable 'users'
+     ```
+   - **Explanation:** Adds a new column family named "preferences" to the "users" table, keeping up to 5 versions of data for cells in this family.
 
-4.  **alter 'table_name', 'column_family'** (This syntax typically adds a CF, or modifies an existing one with options)
-    *   **Command:** `alter 'mytable', 'new_cf'`
-    *   **Example Input (adding a new CF):** `alter 'employees', {NAME => 'contact_info'}`
-    *   **Example Output:** `Updating all regions with new schema...` followed by `0 row(s) in W.WWW seconds` or `1/1 regions updated.`
-    *   **State After:** Table `employees` now has an additional column family `contact_info`.
+**5. `describe 'table_name'`**
+   - **Example Use:** `describe 'users'`
+   - **Explanation:** Displays the schema of the "users" table, including its column families and their properties.
 
-5.  **describe 'table_name'**
-    *   **Command:** `describe 'mytable'`
-    *   **Example Input:** `describe 'employees'`
-    *   **Example Output:** (Something like this)
-        ```
-        Table employees is ENABLED
-        employees
-        COLUMN FAMILIES DESCRIPTION
-        {NAME => 'contact_info', BLOOMFILTER => 'ROW', ...}
-        {NAME => 'job_details', BLOOMFILTER => 'ROW', ...}
-        {NAME => 'personal_info', BLOOMFILTER => 'ROW', ...}
-        3 row(s) in V.VVV seconds
-        ```
+**6. `list`**
+   - **Example Use:** `list`
+   - **Explanation:** Lists all tables in the HBase instance.
 
-6.  **list**
-    *   **Command:** `list`
-    *   **Example Input:** `list`
-    *   **Example Output:**
-        ```
-        TABLE
-        employees
-        another_table
-        2 row(s) in U.UUU seconds
-        ```
+**7. `put 'table_name', 'row_key', 'column_family:column', 'value'`**
+   - **Example Use:** `put 'users', 'user123', 'personal_data:name', 'Alice Smith'`
+   - **Explanation:** Inserts or updates the value 'Alice Smith' into the table 'users', at row 'user123', in column family 'personal_data', under the qualifier (column) 'name'.
 
-7.  **put 'table_name', 'row_key', 'column_family:column', 'value'**
-    *   **Command:** `put 'mytable', 'row1', 'cf1:col1', 'val1'`
-    *   **Example Input:** `put 'employees', 'emp001', 'personal_info:name', 'John Doe'`
-    *   **Example Output:** (Usually no direct output, or `0 row(s) in T.TTT seconds`)
-    *   **Example Input (more data for same row):** `put 'employees', 'emp001', 'job_details:title', 'Software Engineer'`
-    *   **Example Output:** (Same as above)
-    *   **State After:** Row `emp001` in table `employees` has `personal_info:name = 'John Doe'` and `job_details:title = 'Software Engineer'`.
+**8. `put 'table_name', 'row_key', 'column_family:column', 'new_value'` (same as insert, just emphasizes update)**
+   - **Example Use:** `put 'users', 'user123', 'contact_info:email', 'alice.smith@example.com'`
+   - **Explanation:** Updates (or inserts if not present) the email for 'user123'. If 'contact_info:email' already had a value for 'user123', it would be overwritten (or a new version created, depending on table settings).
 
-8.  **put 'table_name', 'row_key', 'column_family:column', 'new_value'** (This is the same as insert, it overwrites)
-    *   **Command:** `put 'mytable', 'row1', 'cf1:col1', 'updated_val1'`
-    *   **Example Input:** `put 'employees', 'emp001', 'personal_info:name', 'Jonathan Doe'`
-    *   **Example Output:** (Usually no direct output)
-    *   **State After:** Row `emp001`'s `personal_info:name` is now `'Jonathan Doe'`.
+**9. `get 'table_name', 'row_key'`**
+   - **Example Use:** `get 'users', 'user123'`
+   - **Explanation:** Retrieves all columns and their values for the row with key 'user123' from the 'users' table.
 
-9.  **get 'table_name', 'row_key'**
-    *   **Command:** `get 'mytable', 'row1'`
-    *   **Example Input:** `get 'employees', 'emp001'`
-    *   **Example Output:**
-        ```
-        COLUMN                         CELL
-         job_details:title             timestamp=..., value=Software Engineer
-         personal_info:name            timestamp=..., value=Jonathan Doe
-        2 row(s) in S.SSS seconds
-        ```
+**10. `scan 'table_name'`**
+    - **Example Use:** `scan 'users'`
+    - **Explanation:** Retrieves multiple rows from the 'users' table. By default, it might show a limited number of rows; options can be added to filter or limit.
+    - **Example with filter:** `scan 'users', {COLUMNS => 'personal_data:name'}` (Retrieves only the 'name' column from 'personal_data' family for all rows)
 
-10. **scan 'table_name'**
-    *   **Command:** `scan 'mytable'`
-    *   **Example Input:** `scan 'employees'`
-    *   **Example Output:** (Assuming another employee `emp002` was added)
-        ```
-        ROW                            COLUMN+CELL
-         emp001                        column=job_details:title, timestamp=..., value=Software Engineer
-         emp001                        column=personal_info:name, timestamp=..., value=Jonathan Doe
-         emp002                        column=personal_info:name, timestamp=..., value=Jane Smith
-        2 row(s) in R.RRR seconds
-        ```
-        (Output will list all cells for all rows in the table)
-
-11. **count 'table_name'**
-    *   **Command:** `count 'mytable'`
-    *   **Example Input:** `count 'employees'`
-    *   **Example Output:** `2 row(s) in Q.QQQ seconds` (If there are 2 rows: emp001, emp002)
-
-This covers all the commands with illustrative examples. Remember that specific output formatting and messages might differ slightly across environments.
+**11. `count 'table_name'`**
+    - **Example Use:** `count 'users'`
+    - **Explanation:** Counts the number of rows in the 'users' table. This can be slow for very large tables.
 
 ---
 
